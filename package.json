@@ -1,0 +1,41 @@
+{
+  "name": "todo-list",
+  "version": "1.0.0",
+  "description": "A simple todo-list application",
+  "main": "index.js",
+  "scripts": {
+    "typescript": "tsc",
+    "typescript-watch": "tsc --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/syauqeesy/todo-list.git"
+  },
+  "keywords": [
+    "API",
+    "TypeScript",
+    "Express",
+    "MySQL"
+  ],
+  "author": "Ahmad Syauqi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/syauqeesy/todo-list/issues"
+  },
+  "homepage": "https://github.com/syauqeesy/todo-list#readme",
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/express": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.7",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "express": "^5.0.1",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.11.4",
+    "uuid": "^11.0.2",
+    "yup": "^1.4.0"
+  }
+}
