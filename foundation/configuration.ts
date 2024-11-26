@@ -2,6 +2,22 @@ import { config } from "dotenv";
 
 config();
 
+export interface Configuration {
+  application: {
+    env: "development" | "production";
+    port: number;
+    secret: string;
+    base_url: string;
+  };
+  database: {
+    host: string;
+    port: number;
+    user: string;
+    password: string;
+    name: string;
+  };
+}
+
 export default {
   application: {
     env: (process.env.APPLICATION_ENV ?? "development") as
@@ -20,4 +36,4 @@ export default {
     password: String(process.env.DATABASE_PASSWORD ?? ""),
     name: String(process.env.DATABASE_NAME ?? "todo_list"),
   },
-};
+} as Configuration;

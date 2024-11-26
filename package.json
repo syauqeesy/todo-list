@@ -6,7 +6,8 @@
   "scripts": {
     "typescript": "tsc",
     "typescript-watch": "tsc --watch",
-    "format": "prettier . --write"
+    "format": "prettier . --write",
+    "start": "node ./dist/index.js"
   },
   "repository": {
     "type": "git",

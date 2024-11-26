@@ -1,1 +1,5 @@
-console.log("Hello, world", { t: 1, d: 2 });
+import Application from "./foundation/application";
+
+const application = new Application();
+
+application.start();
