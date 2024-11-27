@@ -34,9 +34,9 @@ class Application {
 
     this.database.start();
 
-    const [result] = await (
-      await this.database.getConnection()
-    ).execute("SELECT NOW() AS CURRENT_MOMENT");
+    const [result] = await this.database.withConnection(
+      async (conn) => await conn.execute("SELECT NOW() AS THIS_MOMENT"),
+    );
 
     console.log(result);
 

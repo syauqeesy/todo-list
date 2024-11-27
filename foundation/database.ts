@@ -30,6 +30,7 @@ class Database {
       user: this.user,
       password: this.password,
       database: this.database,
+      connectionLimit: 5,
     });
   }
 
@@ -43,6 +44,17 @@ class Database {
     if (!this.poolConnection) throw new Error("connection pool is not started");
 
     return this.poolConnection.getConnection();
+  }
+
+  public async withConnection<Result>(
+    execute: (poolConnection: PoolConnection) => Promise<Result>,
+  ): Promise<Result> {
+    const connection = await this.poolConnection.getConnection();
+    try {
+      return await execute(connection);
+    } finally {
+      connection.release();
+    }
   }
 }
 
