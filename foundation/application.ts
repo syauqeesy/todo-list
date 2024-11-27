@@ -34,11 +34,11 @@ class Application {
 
     this.database.start();
 
-    const [rows] = await (
+    const [result] = await (
       await this.database.getConnection()
     ).execute("SELECT NOW() AS CURRENT_MOMENT");
 
-    console.log(rows);
+    console.log(result);
 
     this.application.listen(this.configuration.application.port, () =>
       console.log(
