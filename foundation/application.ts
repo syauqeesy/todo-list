@@ -3,14 +3,23 @@ import configuration, { Configuration } from "./configuration";
 import { writeResponse } from "./helper";
 import { HttpStatusCode } from "../enum/http-status-code";
 import { HttpStatusMessage } from "../enum/http-status-message";
+import Database from "./database";
 
 class Application {
   private application: Express;
   private configuration: Configuration;
+  private database: Database;
 
   public constructor() {
     this.application = express();
     this.configuration = configuration;
+    this.database = new Database(
+      this.configuration.database.host,
+      this.configuration.database.port,
+      this.configuration.database.user,
+      this.configuration.database.password,
+      this.configuration.database.name,
+    );
   }
 
   public async start(): Promise<void> {
@@ -22,6 +31,14 @@ class Application {
         null,
       ),
     );
+
+    this.database.start();
+
+    const [rows] = await (
+      await this.database.getConnection()
+    ).execute("SELECT NOW() AS CURRENT_MOMENT");
+
+    console.log(rows);
 
     this.application.listen(this.configuration.application.port, () =>
       console.log(
