@@ -3,6 +3,8 @@ import mysql, { Pool, PoolConnection } from "mysql2/promise";
 class Database {
   private poolConnection!: Pool;
 
+  private isShuttingDown: boolean = false;
+
   private host: string;
   private port: number;
   private user: string;
@@ -37,7 +39,15 @@ class Database {
   public async stop(): Promise<void> {
     if (!this.poolConnection) throw new Error("connection pool is not started");
 
-    await this.poolConnection.end();
+    if (!this.isShuttingDown) {
+      this.isShuttingDown = true;
+
+      try {
+        await this.poolConnection.end();
+      } catch (error: unknown) {
+        if (error instanceof Error) console.log(error.message);
+      }
+    }
   }
 
   public async getConnection(): Promise<PoolConnection> {
@@ -49,6 +59,9 @@ class Database {
   public async withConnection<Result>(
     execute: (poolConnection: PoolConnection) => Promise<Result>,
   ): Promise<Result> {
+    if (this.isShuttingDown)
+      throw new Error("database is shutting down, cannot execute queries");
+
     const connection = await this.poolConnection.getConnection();
     try {
       return await execute(connection);

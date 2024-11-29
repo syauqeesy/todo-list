@@ -4,11 +4,13 @@ import { writeResponse } from "./helper";
 import { HttpStatusCode } from "../enum/http-status-code";
 import { HttpStatusMessage } from "../enum/http-status-message";
 import Database from "./database";
+import { Server } from "http";
 
 class Application {
   private application: Express;
   private configuration: Configuration;
   private database: Database;
+  private server!: Server;
 
   public constructor() {
     this.application = express();
@@ -40,11 +42,27 @@ class Application {
 
     console.log(result);
 
-    this.application.listen(this.configuration.application.port, () =>
-      console.log(
-        `server running on port ${this.configuration.application.port}`,
-      ),
+    this.server = this.application.listen(
+      this.configuration.application.port,
+      () =>
+        console.log(
+          `server running on port ${this.configuration.application.port}`,
+        ),
     );
+
+    process.on("SIGINT", () => this.stop());
+    process.on("SIGTERM", () => this.stop());
+  }
+
+  private async stop(): Promise<void> {
+    if (!this.server || !this.database) return;
+
+    this.server.close((error) => {
+      if (!error) console.log("server stopped");
+    });
+
+    await this.database.stop();
+    console.log("database stopped");
   }
 }
 
