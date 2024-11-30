@@ -1,10 +1,18 @@
-import express, { Application as Express, Request, Response } from "express";
+import express, {
+  Application as Express,
+  json,
+  Request,
+  Response,
+} from "express";
 import configuration, { Configuration } from "./configuration";
 import { writeResponse } from "./helper";
 import { HttpStatusCode } from "../enum/http-status-code";
 import { HttpStatusMessage } from "../enum/http-status-message";
 import Database from "./database";
 import { Server } from "http";
+import { initService } from "../service";
+import { initRepository } from "../repository";
+import { initHandler } from "../handler";
 
 class Application {
   private application: Express;
@@ -41,6 +49,10 @@ class Application {
     );
 
     console.log(result);
+
+    this.application.use(json());
+
+    initHandler(this.application, initService(initRepository(this.database)));
 
     this.server = this.application.listen(
       this.configuration.application.port,
