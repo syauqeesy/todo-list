@@ -10,15 +10,15 @@ class User {
   private updated_at: number | null = null;
   private deleted_at: number | null = null;
 
-  public constructor(username: string, password: string) {
+  public constructor(username: string, password?: string) {
     this.setId();
     this.setUsername(username);
-    this.setPassword(password);
+    if (password) this.setPassword(password);
     this.setCreatedAt();
   }
 
-  private setId(): void {
-    this.id = uuid();
+  public setId(id?: string): void {
+    this.id = id ? id : uuid();
   }
 
   public setUsername(username: string): void {
@@ -42,8 +42,8 @@ class User {
     this.password = hash(password, salt);
   }
 
-  private setCreatedAt(): void {
-    this.created_at = Date.now();
+  public setCreatedAt(createdAt?: number): void {
+    this.created_at = createdAt ? createdAt : Date.now();
   }
 
   public setUpdatedAt(): void {
