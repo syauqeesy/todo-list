@@ -12,7 +12,7 @@ export class User extends Repository implements UserRepository {
     return this.database.withConnection<UserModel | null>(
       async (poolConnection: PoolConnection): Promise<UserModel | null> => {
         const [result] = await poolConnection.query<RowDataPacket[]>(
-          "SELECT * FROM users WHERE username = ? AND deleted_at IS NULL  LIMIT 1",
+          "SELECT * FROM users WHERE username = ? AND deleted_at IS NULL LIMIT 1",
           [username],
         );
 
