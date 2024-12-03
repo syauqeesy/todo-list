@@ -11,17 +11,17 @@ export class User extends Repository implements UserRepository {
   public async selectByUsername(username: string): Promise<UserModel | null> {
     return this.database.withConnection<UserModel | null>(
       async (poolConnection: PoolConnection): Promise<UserModel | null> => {
-        const [result] = await poolConnection.query<RowDataPacket[]>(
+        const [results] = await poolConnection.query<RowDataPacket[]>(
           "SELECT * FROM users WHERE username = ? AND deleted_at IS NULL LIMIT 1",
           [username],
         );
 
-        if (result.length !== 1) return null;
+        if (results.length !== 1) return null;
 
-        const user = new UserModel(result[0].username);
+        const user = new UserModel(results[0].username);
 
-        user.setId(result[0].id);
-        user.setCreatedAt(result[0].created_at);
+        user.setId(results[0].id);
+        user.setCreatedAt(results[0].created_at);
 
         return user;
       },
