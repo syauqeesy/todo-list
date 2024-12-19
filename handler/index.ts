@@ -1,6 +1,6 @@
 import { Application, Request, Response } from "express";
 import { service } from "../service";
-import { writeResponse } from "../foundation/helper";
+import { writeResponse, httpErrorHandler } from "../foundation/helper";
 import { HttpStatusCode } from "../enum/http-status-code";
 import { HttpStatusMessage } from "../enum/http-status-message";
 import { CreateUserRequest } from "../type/user";
@@ -21,14 +21,7 @@ export const initHandler = (application: Application, service: service) => {
           result,
         );
       } catch (error: unknown) {
-        if (error instanceof Error) console.log(error.message);
-
-        writeResponse(
-          response,
-          HttpStatusCode.InternalServerError,
-          HttpStatusMessage[HttpStatusCode.InternalServerError],
-          null,
-        );
+        httpErrorHandler(response, error);
       }
     },
   );

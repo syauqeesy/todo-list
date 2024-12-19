@@ -2,6 +2,7 @@ import Service from "./service";
 import { UserInfo } from "../type/user";
 import { CreateUserRequest } from "../type/user";
 import UserModel from "../model/user";
+import { USERNAME_ALREADY_USED } from "../exception/user";
 
 export interface UserService {
   register(request: CreateUserRequest): Promise<UserInfo>;
@@ -13,7 +14,7 @@ export class User extends Service implements UserService {
       request.username,
     );
 
-    if (alreadyExist !== null) throw new Error("username already used");
+    if (alreadyExist !== null) throw USERNAME_ALREADY_USED;
 
     const user = new UserModel({
       username: request.username,
