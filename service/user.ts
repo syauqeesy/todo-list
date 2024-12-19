@@ -15,7 +15,10 @@ export class User extends Service implements UserService {
 
     if (alreadyExist !== null) throw new Error("username already used");
 
-    const user = new UserModel(request.username, request.password);
+    const user = new UserModel({
+      username: request.username,
+      password: request.password,
+    });
 
     await this.repository.user.insert(user);
 

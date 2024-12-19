@@ -2,6 +2,16 @@ import { v7 as uuid } from "uuid";
 import { string } from "yup";
 import { genSaltSync as genSalt, hashSync as hash } from "bcryptjs";
 import { UserInfo } from "../type/user";
+
+interface UserModel {
+  id?: string;
+  username: string;
+  password?: string;
+  created_at?: number;
+  updated_at?: number | null;
+  deleted_at?: number | null;
+}
+
 class User {
   private id!: string;
   private username!: string;
@@ -10,11 +20,13 @@ class User {
   private updated_at: number | null = null;
   private deleted_at: number | null = null;
 
-  public constructor(username: string, password?: string) {
-    this.setId();
-    this.setUsername(username);
-    if (password) this.setPassword(password);
-    this.setCreatedAt();
+  public constructor(user: UserModel) {
+    this.setId(user.id);
+    this.setUsername(user.username);
+    if (user.password) this.setPassword(user.password);
+    this.setCreatedAt(user.created_at);
+    this.setUpdatedAt(user.updated_at);
+    this.setDeletedAt(user.deleted_at);
   }
 
   public setId(id?: string): void {
@@ -46,12 +58,12 @@ class User {
     this.created_at = createdAt ? createdAt : Date.now();
   }
 
-  public setUpdatedAt(): void {
-    this.updated_at = Date.now();
+  public setUpdatedAt(updatedAt?: number | null): void {
+    this.updated_at = updatedAt ? updatedAt : Date.now();
   }
 
-  public setDeletedAt(): void {
-    this.deleted_at = Date.now();
+  public setDeletedAt(deletedAt?: number | null): void {
+    this.deleted_at = deletedAt ? deletedAt : Date.now();
   }
 
   public getId(): string {

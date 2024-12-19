@@ -33,15 +33,6 @@ class Application {
   }
 
   public async start(): Promise<void> {
-    this.application.all("", (_: Request, response: Response) =>
-      writeResponse(
-        response,
-        HttpStatusCode.NotFound,
-        HttpStatusMessage[HttpStatusCode.NotFound],
-        null,
-      ),
-    );
-
     this.database.start();
 
     const [result] = await this.database.withConnection(
@@ -53,6 +44,15 @@ class Application {
     this.application.use(json());
 
     initHandler(this.application, initService(initRepository(this.database)));
+
+    this.application.use((_: Request, response: Response) =>
+      writeResponse(
+        response,
+        HttpStatusCode.NotFound,
+        HttpStatusMessage[HttpStatusCode.NotFound],
+        null,
+      ),
+    );
 
     this.server = this.application.listen(
       this.configuration.application.port,

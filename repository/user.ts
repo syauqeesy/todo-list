@@ -18,10 +18,13 @@ export class User extends Repository implements UserRepository {
 
         if (results.length !== 1) return null;
 
-        const user = new UserModel(results[0].username);
-
-        user.setId(results[0].id);
-        user.setCreatedAt(results[0].created_at);
+        const user = new UserModel({
+          id: results[0].id,
+          username: results[0].username,
+          created_at: results[0].created_at,
+          updated_at: results[0].updated_at,
+          deleted_at: results[0].deleted_at,
+        });
 
         return user;
       },

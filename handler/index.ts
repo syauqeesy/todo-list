@@ -7,7 +7,7 @@ import { CreateUserRequest } from "../type/user";
 
 export const initHandler = (application: Application, service: service) => {
   application.post(
-    "/api/v1/user",
+    "/v1/user",
     async (request: Request, response: Response): Promise<void> => {
       try {
         const body = request.body as CreateUserRequest;
